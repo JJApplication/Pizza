@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package pizza.app;
+
+service AppService {
+  rpc GetGatewayStatus(GatewayStatusRequest) returns (GatewayStatusResponse);
+  rpc GetFrontProxyStatus(FrontProxyStatusRequest) returns (FrontProxyStatusResponse);
+  rpc GetModifierManagerInfo(ModifierManagerInfoRequest) returns (ModifierManagerInfoResponse);
+  rpc GetStatServerConfig(StatServerConfigRequest) returns (StatServerConfigResponse);
+  rpc GetRuntime(RuntimeRequest) returns (RuntimeResponse);
+  rpc GetDomainMap(DomainMapRequest) returns (DomainMapResponse);
+  rpc GetDomainPorts(DomainPortsRequest) returns (DomainPortsResponse);
+  rpc ReloadConfig(ReloadConfigRequest) returns (ReloadConfigResponse);
+  rpc ReStartFront(ReStartFrontRequest) returns (ReStartFrontResponse);
+  rpc ReStartGateway(ReStartGatewayRequest) returns (ReStartGatewayResponse);
+  rpc ReStartBackend(ReStartBackendRequest) returns (ReStartBackendResponse);
+  rpc ReStartLatency(ReStartLatencyRequest) returns (ReStartLatencyResponse);
+  rpc StartDomainService(StartDomainServiceRequest) returns (StartDomainServiceResponse);
+  rpc StopDomainService(StopDomainServiceRequest) returns (StopDomainServiceResponse);
+  rpc DumpRuntime(DumpRuntimeRequest) returns (DumpRuntimeResponse);
+}
+
+message GatewayStatusRequest {}
+message GatewayStatusResponse {
+  bool running = 1;
+  repeated ServerStatus servers = 2;
+  MiddlewareConfig middleware = 3;
+}
+
+message ServerStatus {
+  string name = 1;
+  string addr = 2;
+  bool tls = 3;
+  bool started = 4;
+}
+
+message MiddlewareConfig {
+  bool gzip_enabled = 1;
+  bool cors_enabled = 2;
+  bool trace_enabled = 3;
+  bool secure_headers = 4;
+}
+
+message FrontProxyStatusRequest {}
+message FrontProxyStatusResponse {
+  string mode = 1;
+  int32 port = 2;
+  bool cache_enabled = 3;
+}
+
+message ModifierManagerInfoRequest {}
+message ModifierManagerInfoResponse {
+  repeated string enabled_modifiers = 1;
+}
+
+message StatServerConfigRequest {}
+message StatServerConfigResponse {
+  bool enabled = 1;
+  string mongo_uri = 2;
+  string db_name = 3;
+}
+
+message RuntimeRequest {}
+message RuntimeResponse {
+  int32 cpu_cores = 1;
+  uint64 memory_mb = 2;
+  int32 goroutines = 3;
+  string net_io_mode = 4;
+}
+
+message DomainMapRequest {}
+message DomainMapResponse {
+  map<string, string> domain_map = 1;
+}
+
+message DomainPortsRequest {}
+message PortList {
+  repeated int32 ports = 1;
+}
+message DomainPortsResponse {
+  map<string, PortList> domain_ports = 1;
+}
+
+message ReloadConfigRequest {}
+message ReloadConfigResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReStartFrontRequest {}
+message ReStartFrontResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReStartGatewayRequest {}
+message ReStartGatewayResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReStartBackendRequest {}
+message ReStartBackendResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReStartLatencyRequest {}
+message ReStartLatencyResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message StartDomainServiceRequest {
+  string domain = 1;
+}
+message StartDomainServiceResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message StopDomainServiceRequest {
+  string domain = 1;
+}
+message StopDomainServiceResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message DumpRuntimeRequest {
+  string output_path = 1;
+}
+message DumpRuntimeResponse {
+  bool success = 1;
+  string message = 2;
+}
